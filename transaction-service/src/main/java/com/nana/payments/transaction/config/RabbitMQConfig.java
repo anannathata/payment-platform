@@ -1,8 +1,10 @@
 package com.nana.payments.transaction.config;
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.amqp.support.converter.MessageConverter;
 
 @Configuration
 public class RabbitMQConfig {
@@ -13,4 +15,10 @@ public class RabbitMQConfig {
     public Queue transactionCreatedQueue() {
         return new Queue(TRANSACTION_CREATED_QUEUE, true);
     }
+
+    @Bean
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
 }
