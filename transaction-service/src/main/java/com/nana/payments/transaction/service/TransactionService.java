@@ -11,6 +11,9 @@ import com.nana.payments.transaction.entity.Transaction;
 import com.nana.payments.transaction.entity.TransactionStatus;
 import com.nana.payments.transaction.repository.TransactionRepository;
 
+import com.nana.payments.transaction.event.TransactionCreatedEvent;
+import com.nana.payments.transaction.publisher.TransactionEventPublisher;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class TransactionService {
 
     private final TransactionRepository repository;
+
+    private final TransactionEventPublisher publisher;
 
     public TransactionResponse create(CreateTransactionRequest request) {
 
@@ -31,6 +36,12 @@ public class TransactionService {
                 .build();
 
         Transaction savedTransaction = repository.save(transaction);
+
+        publisher.publish(
+                new TransactionCreatedEvent(
+                        savedTransaction.getId(),
+                        savedTransaction.getAccountId(),
+                        savedTransaction.getAmount()));
 
         return new TransactionResponse(
                 savedTransaction.getId(),

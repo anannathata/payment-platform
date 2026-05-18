@@ -20,12 +20,16 @@ import com.nana.payments.transaction.dto.TransactionResponse;
 import com.nana.payments.transaction.entity.Transaction;
 import com.nana.payments.transaction.entity.TransactionStatus;
 import com.nana.payments.transaction.repository.TransactionRepository;
+import com.nana.payments.transaction.publisher.TransactionEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionServiceTest {
 
     @Mock
     private TransactionRepository repository;
+
+    @Mock
+    private TransactionEventPublisher publisher;
 
     @InjectMocks
     private TransactionService service;
