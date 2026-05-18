@@ -12,13 +12,14 @@ on:
       - master
 
 jobs:
-
   build-and-test:
-
     runs-on: ubuntu-latest
 
-    steps:
+    defaults:
+      run:
+        working-directory: transaction-service
 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
