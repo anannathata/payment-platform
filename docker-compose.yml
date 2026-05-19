@@ -30,7 +30,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
+      - "0808:0808"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/paymentdb
       SPRING_DATASOURCE_USERNAME: paymentuser
