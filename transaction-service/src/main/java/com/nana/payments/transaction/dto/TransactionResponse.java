@@ -8,17 +8,19 @@ import com.nana.payments.transaction.entity.TransactionStatus;
 
 public record TransactionResponse(
 
-        UUID id,
+                UUID id,
 
-        UUID accountId,
+                UUID accountId,
 
-        String name,
+                String name,
 
-        BigDecimal amount,
+                BigDecimal amount,
 
-        TransactionStatus status,
+                TransactionStatus status,
 
-        LocalDateTime createdAt
+                LocalDateTime createdAt,
+
+                String createdBy
 
 ) {
 }
