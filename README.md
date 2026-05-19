@@ -1,100 +1,69 @@
 # Payment Platform
 
-Microservices-based payment platform built with Java, Spring Boot, RabbitMQ, Docker and CI/CD practices.
+Microservices-based payment platform built with Java, Spring Boot, RabbitMQ, PostgreSQL and Docker.
 
-## Overview
+This project simulates a distributed payment ecosystem using event-driven architecture and backend engineering best practices.
 
-This project simulates a distributed payment processing ecosystem inspired by real-world financial platforms.
+---
 
-The architecture is based on independent microservices communicating asynchronously through RabbitMQ.
-
-Current implemented services:
-
-* `transaction-service` → creates and stores payment transactions
-* `notification-service` → consumes transaction events asynchronously
-
-## Architecture
+# Architecture
 
 ```text
+client
+   ↓
+auth-service
+   ↓ JWT
 transaction-service
-        |
-        | publish event
-        v
-    RabbitMQ
-        |
-        | consume event
-        v
+   ↓ RabbitMQ event
 notification-service
 ```
-
-## Technologies
-
-### Backend
-
-* Java 17
-* Spring Boot 3
-* Spring Web
-* Spring Data JPA
-* Spring AMQP
-* Maven
-* Lombok
-
-### Infrastructure
-
-* PostgreSQL
-* RabbitMQ
-* Docker
-* Docker Compose
-
-### Quality & DevOps
-
-* JUnit 5
-* Mockito
-* GitHub Actions
-* CI/CD pipeline
-* Feature branch workflow
-* Pull Requests
-* Conventional Commits
 
 ---
 
 # Services
 
+## auth-service
+
+Responsible for:
+
+- authentication
+- JWT generation
+- credential validation
+
+### Endpoint
+
+```http
+POST /auth/login
+```
+
+Runs on:
+
+```text
+localhost:8082
+```
+
+---
+
 ## transaction-service
 
 Responsible for:
 
-* transaction creation
-* persistence with PostgreSQL
-* publishing transaction events to RabbitMQ
-* API documentation
-* validation and exception handling
-
-### Features
-
-* RESTful API
-* DTO validation
-* Global exception handling
-* Swagger/OpenAPI
-* Event publishing
-* Unit tests
+- transaction creation
+- PostgreSQL persistence
+- JWT-protected endpoints
+- RabbitMQ event publishing
 
 ### Endpoint
 
-#### Create transaction
-
 ```http
 POST /transactions
+Authorization: Bearer <token>
 ```
 
-Example request:
+Runs on:
 
-```json
-{
-  "accountId": "11111111-1111-1111-1111-111111111111",
-  "name": "nana",
-  "amount": 299.90
-}
+```text
+localhost:8080
 ```
 
 ---
@@ -103,27 +72,46 @@ Example request:
 
 Responsible for:
 
-* consuming transaction events
-* asynchronous processing
-* event-driven communication
+- consuming transaction events
+- asynchronous processing
 
-### Features
+Runs on:
 
-* RabbitMQ consumer
-* JSON event conversion
-* asynchronous event processing
+```text
+localhost:8081
+```
+
+---
+
+# Technologies
+
+## Backend
+
+- Java 17
+- Spring Boot 3
+- Spring Security
+- Spring Data JPA
+- Spring AMQP
+- Maven
+
+## Infrastructure
+
+- PostgreSQL
+- RabbitMQ
+- Docker
+- Docker Compose
+
+## Quality
+
+- JUnit 5
+- Mockito
+- GitHub Actions
+- CI/CD
+- Conventional Commits
 
 ---
 
 # Running Locally
-
-## Requirements
-
-* Java 17+
-* Maven
-* Docker Desktop
-
----
 
 ## Clone repository
 
@@ -141,13 +129,13 @@ cd payment-platform
 docker compose up -d
 ```
 
-Services:
+RabbitMQ Management UI:
 
-* PostgreSQL → `localhost:5432`
-* RabbitMQ → `localhost:5672`
-* RabbitMQ Management → `http://localhost:15672`
+```text
+http://localhost:15672
+```
 
-RabbitMQ credentials:
+Credentials:
 
 ```text
 username: paymentuser
@@ -156,56 +144,48 @@ password: paymentpass
 
 ---
 
-## Run transaction-service
+## Run services
+
+### auth-service
+
+```bash
+cd auth-service
+./mvnw spring-boot:run
+```
+
+### transaction-service
 
 ```bash
 cd transaction-service
-
 ./mvnw spring-boot:run
 ```
 
-Runs on:
-
-```text
-http://localhost:8080
-```
-
----
-
-## Run notification-service
+### notification-service
 
 ```bash
 cd notification-service
-
 ./mvnw spring-boot:run
-```
-
-Runs on:
-
-```text
-http://localhost:8081
 ```
 
 ---
 
-# RabbitMQ Flow
+# Testing
 
-1. `transaction-service` creates a transaction
-2. Event is published to RabbitMQ
-3. `notification-service` consumes the event
-4. Queue message is acknowledged and removed
+Run tests locally:
+
+```bash
+./mvnw test
+```
 
 ---
 
 # CI/CD
 
-This project uses GitHub Actions for Continuous Integration.
+GitHub Actions pipeline validates:
 
-Pipeline validates:
-
-* Maven build
-* automated tests
-* dependency resolution
+- Maven build
+- automated tests
+- dependency resolution
 
 Workflow:
 
@@ -221,20 +201,9 @@ Merge to Main
 
 ---
 
-# Git Workflow
+# Development Workflow
 
-This repository follows:
-
-* feature branch strategy
-* pull request reviews
-* semantic commits
-* incremental delivery
-
-Examples:
-
-```text
-feat(transaction-service): publish transaction created events with RabbitMQ
-fix(transaction-service): restore RabbitMQ dependency
-chore(git): ignore vscode workspace files
-```
----
+- feature branches
+- pull requests
+- conventional commits
+- CI/CD with GitHub Actions
