@@ -37,4 +37,6 @@ public class Transaction {
     private TransactionStatus status;
 
     private LocalDateTime createdAt;
+
+    private String createdBy;
 }

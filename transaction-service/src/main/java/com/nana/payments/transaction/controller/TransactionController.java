@@ -1,6 +1,7 @@
 package com.nana.payments.transaction.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.nana.payments.transaction.dto.CreateTransactionRequest;
@@ -22,8 +23,8 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create transaction", description = "Creates a new payment transaction")
     public TransactionResponse create(
-            @RequestBody @Valid CreateTransactionRequest request) {
-
-        return service.create(request);
+            @RequestBody @Valid CreateTransactionRequest request,
+            Authentication authentication) {
+        return service.create(request, authentication);
     }
 }
