@@ -12,7 +12,7 @@ on:
       - master
 
 jobs:
-  build-and-test:
+  transaction-service:
     runs-on: ubuntu-latest
 
     defaults:
@@ -22,6 +22,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Grant execute permission
+        run: chmod +x mvnw
+
+      - name: Run tests
+        run: ./mvnw test
+  
+  auth-service:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: auth-service
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5 
 
       - name: Set up Java 17
         uses: actions/setup-java@v5
