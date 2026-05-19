@@ -1,6 +1,7 @@
 package com.nana.payments.auth.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -33,5 +34,12 @@ public class AuthServiceTest {
         assertEquals("Bearer", response.tokenType());
         assertEquals(3600000L, response.expiresIn());
 
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCredentialsAreInvalid() {
+        LoginRequest request = new LoginRequest("admin", "wrong-password");
+
+        assertThrows(IllegalArgumentException.class, () -> authService.login(request));
     }
 }
